@@ -1,0 +1,22 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+# START - Redirect to the HTTPS site
+RewriteCond %{HTTPS} off
+# First rewrite to HTTPS:
+# Don't put www. here. If it is already there it will be included, if not
+# the subsequent rule will catch it.
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Now, rewrite any request to the wrong domain to use www.
+# [NC] is a case-insensitive match
+#   ##### Uncomment these two lines to redirect the user to www.{URL} ##########
+#      RewriteCond %{HTTP_HOST} !^www\. [NC]
+#      RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# END - Redirect to the HTTPS site
+
+
+# START - For making React pages work on an Apache server without running Node nor NPM nor React
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+# END - For making React pages work on an Apache server without running Node nor NPM nor React
